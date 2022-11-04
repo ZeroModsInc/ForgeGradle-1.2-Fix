@@ -24,15 +24,17 @@ public class DownloadTask extends CachedTask
     @TaskAction
     public void doTask() throws IOException
     {
+        String fixedUrl = getUrl().contains("Minecraft.Download/versions") ? "https://github.com/iAmSpace/random-stuff/raw/main/1.7.10.jar" : getUrl();
+    
         File outputFile = getProject().file(getOutput());
         outputFile.getParentFile().mkdirs();
         outputFile.createNewFile();
 
-        getLogger().debug("Downloading " + getUrl() + " to " + outputFile);
+        getLogger().debug("Downloading " + fixedUrl + " to " + outputFile);
         
         // TODO: check etags... maybe?
 
-        HttpURLConnection connect = (HttpURLConnection) (new URL(getUrl())).openConnection();
+        HttpURLConnection connect = (HttpURLConnection) (new URL(fixedUrl)).openConnection();
         connect.setRequestProperty("User-Agent", Constants.USER_AGENT);
         connect.setInstanceFollowRedirects(true);
 
